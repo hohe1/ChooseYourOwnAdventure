@@ -16,21 +16,45 @@ $(document).ready(function() {
 });
 
 function renderLevel(level) {
-    $("#prompt").text(level.message);
     $("#choices").empty();
-
-    var choices = level.choices;
-    if (choices) {
-        for (var i = 0; i < choices.length; i++) {
-            var choice = choices[i];
-            $("#choices").append("<button class='btn btn-outline-secondary' data-next-level='" + choice.nextLevel + "'>" + choice.text + "</button>");
-        }
-    }
 
     setMusic(level);
     setImage(level);
-}
+    $("#prompt").text(level.message[0]);
+        
+    if(level.message.length !== 0){
+        let i = 1;
+        
+        function time(){
+            setTimeout(function() {
+                $("#prompt").text(level.message[i]); 
+                i ++;
+                
+                if (i < level.message.length){  //wait before the function is executed again
+                    time()
+                }else{
+                    callback(); //
+                }
+            }, 1500)
+        }
+        
+        time();
+    }
+    // this line below need to be execute after the if loop is over.
+    
+    function callback(){
+        $("#choices").empty();
+    
 
+        var choices = level.choices;
+        if (choices) {
+            for (var i = 0; i < choices.length; i++) {
+                var choice = choices[i];
+                $("#choices").append("<button class='btn btn-outline-secondary' data-next-level='" + choice.nextLevel + "'>" + choice.text + "</button>");
+            }
+        }
+    }
+}
 var currentMusic = "";
 
 function setMusic(level) {
@@ -45,6 +69,7 @@ function setMusic(level) {
 function setImage(level) {
     var image = level.background_image || game.background_image || "";
     $("#background-image").css("background-image", "url(./img/" + image + ")");
+
 }
 
 $.fn.extend({
