@@ -1,19 +1,55 @@
 /* global $ */
 
+var past = [game.levels.start]; // <---add ;eve; name each time choice button clicked.
+
+
 $(document).ready(function() {
     var firstLevel = game.levels.start;
     renderLevel(firstLevel);
 
+
+
+
     // When user clicks a choice, go to the next level
     $("body").on("click", "#choices button", function() {
+        
         var nextLevel = $(this).attr("data-next-level");
         $("#wrapper").animateCss("fadeOut", function() {
-            renderLevel(game.levels[nextLevel]);
+            renderLevel(game.levels[nextLevel]); //<----- not array is [] notation
+            
+            console.log("below is the normal thing passed in when choice is clicked");
+            console.log(game.levels[nextLevel]);
+            
             $("#wrapper").removeClass("fadeOut");
             $("#wrapper").addClass("fadeIn");
+            
+            past.push(game.levels[nextLevel]); // <--- actually pushing level
+            //past.push(game.levels.);
+            console.log(past);
+        
+            
         });
     });
-});
+    
+    //go back in time
+    $("#back").click(()=>{
+        let lastLevel = past[past.length-2]//past[past.length-2];
+        console.log("below is the 'lastLevel' variable pass in when go back in time")
+        console.log(lastLevel)
+        //console.log("past.length: "+past.length)
+
+        // $("#wrapper").animateCss("fadeOut", function() {
+             renderLevel(lastLevel); //<----- not array is [] notation
+             //$("#wrapper").removeClass("fadeOut");
+            // $("#wrapper").addClass("fadeIn");
+            
+            past.splice(past.length-1,1);
+            //past.splice(past.length-2,1);
+            console.log(past);
+     //});
+    });
+    
+});//<-- closing of doc ready do not touch
 
 function renderLevel(level) {
     $("#choices").empty();
@@ -55,6 +91,9 @@ function renderLevel(level) {
         }
     }
 }
+
+// stuff like music and img are set here
+
 var currentMusic = "";
 
 function setMusic(level) {
